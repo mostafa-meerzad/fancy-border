@@ -22,15 +22,16 @@ body {
   --glow-line-thickness: 3px;
   --glow-blur-color: #fff;
   --glow-blur-size: 10px;
+  --glow-animation-duration: 1500ms;
 }
 
 .glow-container {
-  /* outline: 2px solid; */
   position: absolute;
   pointer-events: none;
   inset: calc(var(--glow-offset) / -2);
   width: calc(100% + var(--glow-offset));
   height: calc(100% + var(--glow-offset));
+  opacity: 0;
 }
 
 .glow-blur,
@@ -43,7 +44,6 @@ body {
   fill: transparent;
   stroke-width: 2px;
   stroke-dasharray: 20 30;
-  transition: stroke-dashoffset 1000ms;
 }
 .glow-line {
   stroke: var(--glow-line-color);
@@ -54,7 +54,39 @@ body {
   stroke: var(--glow-blur-color);
   stroke-width: var(--glow-blur-size);
 }
-.glow-effect:hover .glow-blur,
-.glow-effect:hover .glow-line {
+
+.glow-effect:is(:hover, :focus) :is(.glow-blur, .glow-line) {
   stroke-dashoffset: -50;
+  transition: stroke-dashoffset 1000ms;
+}
+
+.glow-effect:is(:hover, :focus) .glow-container {
+  animation: glow-visibility var(--glow-animation-duration);
+}
+
+/* @keyframes glow-visibility {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+} */
+
+/* here is a shorter way to define animation key-frames */
+@keyframes glow-visibility {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  25%,
+  75% {
+    opacity: 1;
+  }
 }
